@@ -1,19 +1,21 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using Assets.Scripts.World;
+using Assets.Scripts.World.EntityFactory;
 using Assets.Scripts.World.SocialModule;
 using UnityEngine;
 
 namespace Assets.Scripts.StateMachine.States
 {
-    public class GameSimulationState : State<GameState> {
+    public class GameSimulationState : State<GameState>
+    {
 
+        private bool _stateActive;
 
         #region private properties
 
         private OnGuiController _guiController;
         private readonly TestWorldData _worldData;
+        private EntityTypesMap _entityTypesMap;
 
         #endregion
 
@@ -26,9 +28,10 @@ namespace Assets.Scripts.StateMachine.States
 
         public override IEnumerator Execute()
         {
+            _stateActive = true;
             var world = InitializeSimulationWorld();
             
-            while (true)
+            while (_stateActive)
             {
                 world.Update(Time.unscaledDeltaTime);
                 yield return null;
@@ -38,6 +41,7 @@ namespace Assets.Scripts.StateMachine.States
         public override void Stop()
         {
             base.Stop();
+            _stateActive = false;
             Object.DestroyImmediate(_guiController);
         }
         
@@ -56,10 +60,11 @@ namespace Assets.Scripts.StateMachine.States
 
             //init unit factory
             var unitFactory = _worldData.GetComponent<TestUnitFactory>();
+            _entityTypesMap = _worldData.GetComponent<EntityTypesMap>();
             unitFactory.SetWorld(playerWorld);
             // create dummy stockpile
             var stockpile = unitFactory.
-                CreateBuilding(unitFactory.BuildingInfos.First(info => info.Name == "Stockpile"));
+                CreateBuilding(BuildingType.StockpileBlock);
             stockpile.SetPosition(Vector3.zero);
             playerWorld.Stockpile.AddStockpileBlock(stockpile as StockpileBlock);
             //create player
@@ -81,7 +86,7 @@ namespace Assets.Scripts.StateMachine.States
             var debtEvent = new DebtEvent(world,player,10f);
             //constructions
             var constructionModule = new ConstructionModule(world, unitFactory);
-            var constructionOnGui = new ConstructionOnGui(unitFactory, constructionModule);
+            var constructionOnGui = new ConstructionOnGui(unitFactory, _entityTypesMap, constructionModule);
             _guiController.Add(constructionOnGui);
             //reggister events
             world.Events.Add(constructionModule);

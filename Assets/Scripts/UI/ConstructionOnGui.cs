@@ -1,15 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.World.EntityFactory;
 using UnityEngine;
 
 public class ConstructionOnGui : IGuiDrawer
 {
     private readonly TestUnitFactory _unitFactory;
+    private readonly EntityTypesMap _entityTypesMap;
     private readonly ConstructionModule _constructionModule;
 
-    public ConstructionOnGui(TestUnitFactory unitFactory, ConstructionModule constructionModule)
+    public ConstructionOnGui(TestUnitFactory unitFactory,EntityTypesMap entityTypesMap, ConstructionModule constructionModule)
     {
         _unitFactory = unitFactory;
+        _entityTypesMap = entityTypesMap;
         _constructionModule = constructionModule;
     }
 
@@ -21,13 +24,13 @@ public class ConstructionOnGui : IGuiDrawer
 
         if (!_constructionModule.IsPlacingBuilding)
         {
-            foreach (var each in _unitFactory.BuildingInfos)
+            foreach (var each in _entityTypesMap.Buildings.Values)
             {
-                if (GUILayout.Button(each.Name, GUILayout.ExpandWidth(false)))
+                if (GUILayout.Button(each.ToString(), GUILayout.ExpandWidth(false)))
                 {
                     _constructionModule.IsPlacingBuilding = true;
-                    _constructionModule.SelectedBuilding = Object.Instantiate(each.Prefab).gameObject;
-                    _constructionModule.SelectedBuildingInfo = each;
+                    _constructionModule.SelectedBuilding = Object.Instantiate(each.Entity.Prefab).gameObject;
+                    _constructionModule.SelectedBuildingInfo = each.Entity;
                     break;
                 }
             }

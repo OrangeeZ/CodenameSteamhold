@@ -5,21 +5,23 @@ using System.Reflection;
 using Assets.Scripts.Actors;
 using Assets.Scripts.Behaviour;
 using Assets.Scripts.Workplace;
+using Assets.Scripts.World.EntityFactory;
 using UnityEngine;
 
 public class TestUnitFactory : MonoBehaviour
 {
-    [SerializeField]
-    private UnitInfo[] _unitInfos;
-
-    [SerializeField]
-    private BuildingInfo[] _buildingInfos;
-
     private BaseWorld _world;
     private bool _isEnemy = false;
     private Dictionary<string, Type> _behaviourMap;
     private List<UnitInfo> _armyUnitsInfos = new List<UnitInfo>();
     private int _testUnitLimit = 20;
+
+    #region inspector properties
+
+    [SerializeField]
+    private EntityTypesMap _entityTypesMap = new EntityTypesMap();
+
+    #endregion
 
     #region public properties
 
@@ -35,10 +37,6 @@ public class TestUnitFactory : MonoBehaviour
         }
     }
 
-    public UnitInfo[] UnitInfos { get { return _unitInfos; } }
-
-    public BuildingInfo[] BuildingInfos { get { return _buildingInfos; } }
-
     #endregion
 
     void Awake()
@@ -49,6 +47,13 @@ public class TestUnitFactory : MonoBehaviour
     public void SetWorld(BaseWorld world)
     {
         _world = world;
+    }
+
+    public Entity CreateUnit(UnitType unitType)
+    {
+        if (!_entityTypesMap.Units.ContainsKey(unitType))
+            return null;
+        return CreateUnit(_entityTypesMap.Units[unitType].Entity);
     }
 
     public Entity CreateUnit(UnitInfo unitInfo)
@@ -73,6 +78,13 @@ public class TestUnitFactory : MonoBehaviour
         return unit;
     }
 
+    public Entity CreateBuilding(BuildingType buildingType)
+    {
+        if (!_entityTypesMap.Buildings.ContainsKey(buildingType))
+            return null;
+        return CreateBuilding(_entityTypesMap.Buildings[buildingType].Entity);
+    }
+
     public Entity CreateBuilding(BuildingInfo buildingInfo)
     {
         var building = CreateBuildingEntity(buildingInfo);
@@ -86,6 +98,8 @@ public class TestUnitFactory : MonoBehaviour
         return building;
     }
 
+    #region private methods
+
     private Building CreateBuildingEntity(BuildingInfo buildingInfo)
     {
         switch (buildingInfo.Name)
@@ -94,7 +108,7 @@ public class TestUnitFactory : MonoBehaviour
                 return new Barracks(_armyUnitsInfos, _world, this);
             case "Stockpile":
                 return new StockpileBlock(_world);
-            case "cityhouse":
+            case "Cityhouse":
                 return new CityHouse(_world);
             default:
                 return new Workplace(_world);
@@ -117,12 +131,12 @@ public class TestUnitFactory : MonoBehaviour
             Debug.Log(each.Name);
             _behaviourMap[each.Name] = each;
         }
-        //TODO GET UNITs TYPE from another resource
-        _armyUnitsInfos.AddRange(_unitInfos.Where(x => x.Name != "Peasant"));
     }
 
     private IEnumerable<Type> FindDerivedTypes(Assembly assembly, Type baseType)
     {
         return assembly.GetTypes().Where(t => baseType.IsAssignableFrom(t));
     }
+
+    #endregion
 }

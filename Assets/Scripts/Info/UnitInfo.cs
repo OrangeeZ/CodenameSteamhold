@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using csv;
+﻿using csv;
 using UnityEngine;
 using Assets.Scripts.Actors;
 
@@ -35,3 +32,4 @@ public class UnitInfo : ScriptableObject, ICsvConfigurable
         DisplayPanelPrefab = values.GetPrefabWithComponent<EntityDisplayPanel>("DisplayPanelPrefab", false);
     }
 }
+

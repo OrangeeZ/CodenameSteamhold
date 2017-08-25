@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Assets.Scripts.World.EntityFactory;
 using UnityEngine;
 
 public class PopularityEvent : WorldEvent
@@ -58,8 +59,7 @@ public class PopularityEvent : WorldEvent
         else if (foodAmount>0 && _player.Popularity>70 &&
             gameWorld.FreeCitizensCount < gameWorld.PopulationLimit)
         {
-            _unitFactory.CreateUnit(_unitFactory.UnitInfos.
-                FirstOrDefault(x => x.Name == "Peasant"));
+            _unitFactory.CreateUnit(UnitType.Peasant);
         }
         stockpile.ChangeResource(_testFood,-citizensCount);
     }

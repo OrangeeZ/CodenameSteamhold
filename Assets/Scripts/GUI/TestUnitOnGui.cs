@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.World.EntityFactory;
+using UnityEngine;
 
 namespace Assets.Scripts.World
 {
@@ -16,17 +17,17 @@ namespace Assets.Scripts.World
             GUILayout.Space(10);
             _unitFactory.IsEnemy = 
                 GUILayout.Toggle(_unitFactory.IsEnemy, "Is Enemy");
-            foreach (var each in _unitFactory.UnitInfos)
+            foreach (var each in EntityTypesMap.UnitTypes)
             {
-                if (GUILayout.Button("Create " + each.Name))
+                if (GUILayout.Button("Create " + each))
                 {
                     _unitFactory.CreateUnit(each);
                 }
             }
             GUILayout.Space(10);
-            foreach (var each in _unitFactory.BuildingInfos)
+            foreach (var each in EntityTypesMap.BuildingsTypes)
             {
-                if (GUILayout.Button("Create " + each.Name))
+                if (GUILayout.Button("Create " + each))
                 {
                     _unitFactory.CreateBuilding(each);
                 }
