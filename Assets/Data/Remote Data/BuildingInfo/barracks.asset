@@ -17,7 +17,7 @@ MonoBehaviour:
   InputResource: 
   InputResourceQuantity: 0
   ProductionDuration: 0
-  OutputResource: 
+  OutputResource: 0
   OutputResourceQuantity: 0
   Prefab: {fileID: 114441646117180520, guid: 89ebe1e4caab40f4dbe2eb064ac1f067, type: 2}
   DisplayPanelPrefab: {fileID: 114958444657425418, guid: 1aa237168b39c2244a09425916f4faaf,

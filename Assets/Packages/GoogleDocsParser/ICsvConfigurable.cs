@@ -81,14 +81,27 @@ namespace csv {
 			value = Get<T>( name );
 		}
 
-		public void GetEnum<T>( string name, out T value ) {
+		public bool GetEnum<T>( string name, out T value )
+            where T:struct 
+        {
 
 			var stringValue = Get<string>( name );
-
-			value = (T)Enum.Parse( typeof ( T ), stringValue );
+            var result =  Enum.TryParse<T>(stringValue,true,out value);
+		    return result;
 		}
 
-		public T Get<T>( string name ) {
+	    public bool GetEnum<T>(string name, out T value, T defaultValue)
+            where T:struct 
+	    {
+	        if (!GetEnum<T>(name, out value))
+	        {
+	            value = defaultValue;
+	            return false;
+	        }
+	        return true;
+	    }
+
+        public T Get<T>( string name ) {
 			return Get( name, default ( T ) );
 		}
 

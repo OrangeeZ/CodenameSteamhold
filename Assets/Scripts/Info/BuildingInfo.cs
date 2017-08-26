@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Actors;
+using Assets.Scripts.World.EntityFactory;
 using csv;
 using UnityEngine;
 
@@ -22,8 +23,8 @@ public class BuildingInfo : ScriptableObject, ICsvConfigurable
     [RemoteProperty("ProductionDuration")]
     public int ProductionDuration;
 
-    [RemoteProperty("OutputResource")]
-    public string OutputResource;
+    //[RemoteProperty("OutputResource")]
+    public ResourceType OutputResource;
 
     [RemoteProperty("OutputResourceQuantity")]
     public int OutputResourceQuantity;
@@ -36,5 +37,6 @@ public class BuildingInfo : ScriptableObject, ICsvConfigurable
     {
         Prefab = values.GetPrefabWithComponent<ActorView>("Prefab", false);
         DisplayPanelPrefab = values.GetPrefabWithComponent<EntityDisplayPanel>("DisplayPanelPrefab", false);
+        values.GetEnum("OutputResource",out OutputResource,ResourceType.None);
     }
 }

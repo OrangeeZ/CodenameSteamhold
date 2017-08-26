@@ -9,7 +9,6 @@ public class PopularityEvent : WorldEvent
     private float _updatePeriod = 3f;
     private int _popularityStep = 2;
     private float _lastUpdateTime;
-    private string _testFood = "Bread";
 
     #region constructors
 
@@ -43,7 +42,7 @@ public class PopularityEvent : WorldEvent
         var gameWorld = _gameWorld;
         var stockpile = gameWorld.Stockpile.GetClosestStockpileBlock(Vector3.zero);
         var citizensCount = gameWorld.FreeCitizensCount;
-        var foodAmount = stockpile[_testFood];
+        var foodAmount = stockpile[ResourceType.Bread];
         if (foodAmount < citizensCount)
         {
             _player.ChangePopularity(-_popularityStep);
@@ -61,7 +60,7 @@ public class PopularityEvent : WorldEvent
         {
             _unitFactory.CreateUnit(UnitType.Peasant);
         }
-        stockpile.ChangeResource(_testFood,-citizensCount);
+        stockpile.ChangeResource(ResourceType.Bread, -citizensCount);
     }
 
     private void RemoveCitizen(BaseWorld world)

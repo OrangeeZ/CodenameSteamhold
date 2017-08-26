@@ -2,6 +2,7 @@
 {
     public enum ResourceType
     {
+        None,
         Bread,
         Wood,
         Flour,

@@ -1,17 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Assets.Scripts.World.EntityFactory;
 using UnityEngine;
 
 public class StockpileBlock : Building
 {
-    private Dictionary<string, int> _resources = new Dictionary<string, int>();
+    private Dictionary<ResourceType, int> _resources = new Dictionary<ResourceType, int>();
 
     public StockpileBlock(BaseWorld world)
         :base(world)
     {
     }
 
-    public string[] Resources
+    public ResourceType[] Resources
     {
         get { return _resources.Keys.ToArray(); }
     }
@@ -19,7 +20,7 @@ public class StockpileBlock : Building
     /// <summary>
     /// amount of target resource
     /// </summary>
-    public int this[string resource]
+    public int this[ResourceType resource]
     {
         get
         {
@@ -29,12 +30,12 @@ public class StockpileBlock : Building
         }
     }
 
-    public bool HasResource(string resource)
+    public bool HasResource(ResourceType resource)
     {
         return _resources.ContainsKey(resource) && _resources[resource] > 0;
     }
 
-    public void ChangeResource(string resource, int amount)
+    public void ChangeResource(ResourceType resource, int amount)
     {
         if (!_resources.ContainsKey(resource))
         {

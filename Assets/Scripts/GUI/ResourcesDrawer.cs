@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.World.EntityFactory;
 using UnityEditor;
 using UnityEngine;
 
@@ -7,11 +8,11 @@ public class ResourcesDrawer : GuiDrawer
 {
     private readonly BaseWorld _world;
     private bool _foldout;
-    private Dictionary<string, string> _resources;
+    private Dictionary<ResourceType, string> _resources;
 
     public ResourcesDrawer(BaseWorld world)
     {
-        _resources  =new Dictionary<string, string>();
+        _resources  =new Dictionary<ResourceType, string>();
         _world = world;
     }
 
@@ -30,7 +31,7 @@ public class ResourcesDrawer : GuiDrawer
                 GUILayout.BeginHorizontal();
                 var amount = block[resources[j]];
                 var resource = resources[j];
-                GUILayout.Label(string.Format("{0} Count : {1}", resource, amount));
+                GUILayout.Label($"{resource} Count : {amount}");
                 if (!_resources.ContainsKey(resource))
                     _resources[resource] = string.Empty;
                 _resources[resource] = 
